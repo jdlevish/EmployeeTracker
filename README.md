@@ -1,5 +1,5 @@
 
-![]("./public/screen.png")
+![]("/public/screen.png")
 # EmployeeTracker
 
 ## ![](https://img.shields.io/github/license/jdlevish/EmployeeTracker/)
@@ -26,7 +26,7 @@ this project runs in the command prompt and requires node.js all dependencies ar
     
 ## Requirements
     
-the user must have node.js installed plus the projects dependencies installed. those dependencies are the mysql, inquirer, and express packages.
+the user must have node.js installed plus the projects dependencies installed. those dependencies are the mysql,  and inquirer.
 ## Usage Instructions
 
 To use the application you navigate to the program directory, and run node server.js from the command prompt. once running the iser will be propmted to make choices and provide input depending on the tasks they wish to complete.
