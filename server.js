@@ -69,7 +69,7 @@ function promptUser() {
                 viewEmployeesByRoles();
                 break;
             case "update employee's role":
-
+                updateRole();
                 break;
             case "delete employee":
 
@@ -270,6 +270,55 @@ function viewEmployeesByRoles() {
         if (err) throw err;
         console.table(response)
     })
+}
+function updateRole() {
+    viewEmployeesByRoles();
+    var query1 = "SELECT role.title, role.salary, role.department_id FROM role"
+    var roleChoices = []
+    connection.query(query1, function (err, response) {
+        if (err) throw err;
+        // creates an array of objects from the roles table 
+        const roles = response.map(({ title, salary, department_id }) => ({
+            title: title,
+            salary: salary,
+            id: department_id,
+        }));
+        console.log(roles)
+        // creates an array of roles to use in the prompt to create a new employee
+        const roleChoices = [];
+        roles.forEach(element => { roleChoices.push(element.title) })
+        inquirer.prompt([
+            {
+                type: "input",
+                name: "employeeId",
+                message: "Enter the name of the id of the employee who's role you would like to update"
+            },
+            {
+                type: "list",
+                name: "role",
+                message: "select the employee's new role",
+                choices: roleChoices
+
+            },
+        ]).then(function (response) {
+            var id = response.employeeId;
+            var newRole = response.role
+            var roleId = roles.find(element => element.title === newRole);
+            console.log(roleId)
+            var query2 = "UPDATE employee SET department_id =? WHERE id =?"
+
+            connection.query(query2, [roleId.id, id], function (err, response) {
+                if (err) throw err;
+                console.log(response)
+                console.log("employee " + id + "'s role has been updated")
+                promptUser()
+            })
+        })
+
+
+
+    })
+
 }
 
 
