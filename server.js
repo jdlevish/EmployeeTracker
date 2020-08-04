@@ -35,7 +35,7 @@ function promptUser() {
             type: "list",
             name: "operation",
             message: "What operation would you like to preform?",
-            choices: ["add employee", "add role", "add department", "view employees", "view roles", "view departments", "view employees by roles"],
+            choices: ["add employee", "add role", "add department", "view employees", "view roles", "view departments", "view employees by roles", "update employee's role", "delete employee"],
         },
 
 
@@ -67,6 +67,12 @@ function promptUser() {
                 break;
             case "view employees by roles":
                 viewEmployeesByRoles();
+                break;
+            case "update employee's role":
+
+                break;
+            case "delete employee":
+
                 break;
 
         }
@@ -129,10 +135,10 @@ function addEmployee() {
             var query = "INSERT INTO employee SET ?";
 
             connection.query(query, {
-                first_name: firstName,
-                last_name: lastName,
-                department_id: roleId.id,
-                manager_id: managerId
+                first_name: firstName.trim(),
+                last_name: lastName.trim(),
+                department_id: roleId.id.trim(),
+                manager_id: managerId.trim()
 
             }, function (err, response) {
                 if (err) throw err;
@@ -252,14 +258,18 @@ function viewDepartments() {
     })
 }
 function viewEmployeesByRoles() {
-    var query = " SELECT
-    e.first_name employee,
-        e.last_name employee,
-            r.name roles,
+    var query = "SELECT e.id, e.first_name , e.last_name,  r.title FROM employee e  LEFT JOIN role r on e.department_id = r.department_id ";
 
-                FROM
-    employee e
-    LEFT JOIN roles r USING(department_id); "
+
+
+
+
+
+
+    connection.query(query, function (err, response) {
+        if (err) throw err;
+        console.table(response)
+    })
 }
 
 
