@@ -51,7 +51,6 @@ function promptUser() {
 
             case "view employees":
                 getEmployees();
-
                 break;
 
             case "view roles":
@@ -131,10 +130,10 @@ function addEmployee() {
             var query = "INSERT INTO employee SET ?";
 
             connection.query(query, {
-                first_name: firstName.trim(),
-                last_name: lastName.trim(),
-                department_id: roleId.id.trim(),
-                manager_id: managerId.trim()
+                first_name: firstName,
+                last_name: lastName,
+                department_id: roleId.id,
+                manager_id: managerId
 
             }, function (err, response) {
                 if (err) throw err;
@@ -258,7 +257,7 @@ function viewDepartments() {
 }
 // function to view employees by role
 function viewEmployeesByRoles() {
-    var query = "SELECT e.id, e.first_name , e.last_name,  r.title FROM employee e  LEFT JOIN role r on e.department_id = r.department_id ";
+    var query = "SELECT e.id, e.first_name , e.last_name,  r.title FROM employee e  LEFT JOIN role r on e.department_id = r.department_id  ORDER BY r.title";
 
 
 
@@ -269,6 +268,7 @@ function viewEmployeesByRoles() {
     connection.query(query, function (err, response) {
         if (err) throw err;
         console.table(response)
+        promptUser()
     })
 }
 // function to update role of employee
