@@ -56,6 +56,7 @@ function promptUser() {
 
             case "view employees":
                 getEmployees();
+
                 break;
 
             case "view roles":
@@ -72,7 +73,7 @@ function promptUser() {
                 updateRole();
                 break;
             case "delete employee":
-
+                deleteEmployee();
                 break;
 
         }
@@ -200,6 +201,7 @@ function addRoles() {
 
     })
 }
+// function to view available roles
 function getRoles() {
     var query = "SELECT role.title, role.salary, role.department_id FROM role";
 
@@ -215,16 +217,17 @@ function getRoles() {
     })
 
 }
+// function to view a table of all employees
 function getEmployees() {
     var query = "SELECT * FROM employee";
 
     connection.query(query, function (err, response) {
         if (err) throw err;
         console.table(response);
-
-        promptUser()
+        promptUser();
     })
 }
+// function to add new departments
 function addDepartment() {
     inquirer.prompt([
         {
@@ -248,6 +251,7 @@ function addDepartment() {
     })
 
 }
+// function to view departments
 function viewDepartments() {
     var query = "SELECT * FROM department";
     connection.query(query, function (err, response) {
@@ -257,6 +261,7 @@ function viewDepartments() {
 
     })
 }
+// function to view employees by role
 function viewEmployeesByRoles() {
     var query = "SELECT e.id, e.first_name , e.last_name,  r.title FROM employee e  LEFT JOIN role r on e.department_id = r.department_id ";
 
@@ -271,6 +276,7 @@ function viewEmployeesByRoles() {
         console.table(response)
     })
 }
+// function to update role of employee
 function updateRole() {
     viewEmployeesByRoles();
     var query1 = "SELECT role.title, role.salary, role.department_id FROM role"
@@ -304,7 +310,7 @@ function updateRole() {
             var id = response.employeeId;
             var newRole = response.role
             var roleId = roles.find(element => element.title === newRole);
-            console.log(roleId)
+
             var query2 = "UPDATE employee SET department_id =? WHERE id =?"
 
             connection.query(query2, [roleId.id, id], function (err, response) {
@@ -317,6 +323,35 @@ function updateRole() {
 
 
 
+    })
+
+}
+function deleteEmployee() {
+    var query1 = "SELECT * FROM employee";
+
+    connection.query(query1, function (err, response) {
+        if (err) throw err;
+        console.table(response);
+
+    })
+
+    inquirer.prompt([
+        {
+            type: "input",
+            name: "employeeId",
+            message: "Enter the name of the id of the employee you would like to delete from the system"
+        }
+
+    ]).then(function (response) {
+        var query = "DELETE FROM employee WHERE id=?"
+        var id = response.employeeId
+        connection.query(query, [id], function (err, response) {
+            if (err) throw err;
+            console.log(response)
+            console.log("you have successfully removed the employee with id " + id);
+            promptUser();
+
+        })
     })
 
 }
