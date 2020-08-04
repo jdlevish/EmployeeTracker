@@ -1,19 +1,14 @@
 const express = require("express");
 const inquirer = require("inquirer");
 const cTable = require("console.table");
-const path = require("path");
 const mysql = require("mysql");
-const { isBuffer } = require("util");
-const e = require("express");
-const employee = require("../teamprofilemaker/lib/Employee");
-// const promptUser = require("./public/promFuncs");
 
-var app = express();
-var PORT = process.env.PORT || 3001;
 
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-app.use(express.static('public'));
+
+
+
+
+
 
 const connection = mysql.createConnection({
     host: "localhost",
@@ -362,6 +357,3 @@ function deleteEmployee() {
 
 
 
-app.listen(PORT, function () {
-    console.log("App listening on PORT " + PORT);
-});
